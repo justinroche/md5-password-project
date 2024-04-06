@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿/*
+using System.Security.Cryptography;
 using System.Text;
 
 public static class Project2Helper {
@@ -38,3 +39,4 @@ public static class Project2Helper {
 		return true;
 	}
 }
+ */
