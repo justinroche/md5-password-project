@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MD5PasswordProject
 {
@@ -25,6 +26,18 @@ namespace MD5PasswordProject
       // Check for correct formatting.
       // Confirm valid password and hash and break from algorithm.
 
+    }
+
+    // Validate format of password
+    static bool ValidateTarget1String(string input)
+    {
+      // Check if the string length is between 5 and 10 characters (inclusive)
+      if (input.Length < 5 || input.Length > 10)
+        return false;
+
+      // Use regular expression to match alphanumeric characters only
+      Regex regex = new Regex("^[a-zA-Z0-9]*$");
+      return regex.IsMatch(input);
     }
 
     // Compute MD5 hash of password
