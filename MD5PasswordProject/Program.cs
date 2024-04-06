@@ -19,8 +19,8 @@ namespace MD5PasswordProject
       byte[] stolenHash = StringTo16ByteHash(stolenHashString);
 
       // Compute MD5 hash of password
-      string password = "password1";
-      TryLogin(password, stolenHash);
+
+      // Validate format of password
 
       // Generate possible passwords from set of keywords.
       // Check for correct formatting.
