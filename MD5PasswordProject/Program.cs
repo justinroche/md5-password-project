@@ -15,22 +15,19 @@ namespace MD5PasswordProject
 
       // Get stolen hash
       string stolenHashString = "7b0ca5c95a9398a2f32613d987428180";
-      byte[] stolenHash = StringTo16BitHash(stolenHashString);
+      byte[] stolenHash = StringTo16ByteHash(stolenHashString);
 
       // Compute MD5 hash of password
       string password = "password1";
-      byte[] passwordAttemptHashBytes = GetMD5Hash(password);
-      string passwordAttemptHashString = HashToString(passwordAttemptHashBytes);
       TryLogin(password, stolenHash);
 
       // Generate possible passwords from set of keywords.
       // Check for correct formatting.
-      // Hash valid passwords and check against stolen hash.
-      // Print and store incorrect passwords and hashes to txt file.
       // Confirm valid password and hash and break from algorithm.
 
     }
 
+    // Compute MD5 hash of password
     static byte[] GetMD5Hash(string password)
     {
       byte[] passwordBytes = Encoding.ASCII.GetBytes(password);
@@ -38,13 +35,15 @@ namespace MD5PasswordProject
       return hashBytes;
     }
 
+    // Convert 16-byte hash to 32-character hash string
     static string HashToString(byte[] md5Hash)
     {
       string computedHashString = md5Hash != null ? BitConverter.ToString(md5Hash).Replace("-", "") : string.Empty;
       return computedHashString;
     }
 
-    static byte[] StringTo16BitHash(string hashString)
+    // Convert 32-character hash string to 16-byte hash
+    static byte[] StringTo16ByteHash(string hashString)
     {
       if (hashString.Length != 32)
         throw new ArgumentException("Invalid hash string.");
@@ -65,18 +64,22 @@ namespace MD5PasswordProject
       return true;
     }
 
-    static bool TryLogin(string password, byte[] stolenHashString)
+    // Check if password attempt is valid and print result to console and password_attempts.txt
+    static bool TryLogin(string passwordAttemptString, byte[] stolenHashString)
     {
-      byte[] passwordAttemptHash = GetMD5Hash(password);
+      byte[] passwordAttemptHash = GetMD5Hash(passwordAttemptString);
       string passwordAttemptHashString = HashToString(passwordAttemptHash);
 
-      Console.Write(password + " --> " + passwordAttemptHashString);
       bool result = CompareHashes(passwordAttemptHash, stolenHashString);
+      string passwordAttemptResult = passwordAttemptString + " --> " + passwordAttemptHashString;
+
+      Console.WriteLine(passwordAttemptResult);
+      File.AppendAllText("password_attempts.txt", passwordAttemptResult + Environment.NewLine);
 
       if (!result)
         return false;
 
-      Console.WriteLine("Hashes match! Password: " + password);
+      Console.WriteLine("Hashes match! Password: " + passwordAttemptString);
       Console.WriteLine(passwordAttemptHashString + " = " + stolenHashString);
       return true;
     }
