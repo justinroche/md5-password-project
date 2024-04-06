@@ -36,7 +36,7 @@ namespace MD5PasswordProject
           break;
       }
 
-      Console.WriteLine("Loop completed. No matching password found.");
+      Console.WriteLine("Loop completed.");
 
       // Compute MD5 hash of password
 
