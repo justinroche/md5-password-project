@@ -10,7 +10,7 @@ namespace MD5PasswordProject
 
     // Get passwords already attempted
     public static string passwordAttemptsPath = "password_attempts_1.txt";
-    public static string[] passwordAttempts = File.ReadAllLines(passwordAttemptsPath);
+    public static HashSet<string> passwordAttempts = new HashSet<string>(File.ReadAllLines(passwordAttemptsPath));
 
     // Get set of keywords
     public static string keywordsPath = "keywords.txt";
@@ -24,24 +24,6 @@ namespace MD5PasswordProject
       byte[] stolenHash = StringTo16ByteHash(stolenHashString);
 
       Console.WriteLine("Running password generation algorithm...");
-
-      foreach (string keyword in keywords)
-      {
-        // Generate possible passwords from set of keywords.
-
-
-        // Check for correct formatting.
-        if (!ValidateTarget1String(keyword))
-          continue;
-
-        // Check if this password has already been attempted.
-        if (PasswordAlreadyAttempted(keyword, passwordAttempts))
-          continue;
-
-        // Confirm valid password and hash and break from algorithm.
-        if (TryLogin(keyword, stolenHash))
-          break;
-      }
 
       Console.WriteLine("Loop completed.");
 
@@ -74,15 +56,9 @@ namespace MD5PasswordProject
     }
 
     // Check if password hash has already been attempted
-    static bool PasswordAlreadyAttempted(string passwordAttemptString, string[] passwordAttempts)
+    static bool PasswordAlreadyAttempted(string passwordAttemptString)
     {
-      foreach (string attempt in passwordAttempts)
-      {
-        string password = attempt.Split(' ')[0];
-        if (password.Length > 0 && password.Equals(passwordAttemptString))
-          return true;
-      }
-      return false;
+      return passwordAttempts.Contains(passwordAttemptString);
     }
 
     // Validate format of target 1 password attempts.
@@ -155,6 +131,14 @@ namespace MD5PasswordProject
       return true;
     }
 
+    // Log password attempt to console and password attempts file.
+    static void LogPasswordAttempt(string passwordAttemptString, string passwordAttemptHashString)
+    {
+      string passwordAttemptResult = passwordAttemptString + " " + passwordAttemptHashString;
+      Console.WriteLine(passwordAttemptResult);
+      File.AppendAllText(passwordAttemptsPath, passwordAttemptResult + Environment.NewLine);
+    }
+
     // Check if password attempt is valid and print result to console and password attempts file.
     static bool TryLogin(string passwordAttemptString, byte[] stolenHash)
     {
@@ -164,7 +148,7 @@ namespace MD5PasswordProject
         return false;
 
       // Check if this password has already been attempted.
-      if (PasswordAlreadyAttempted(passwordAttemptString, passwordAttempts))
+      if (PasswordAlreadyAttempted(passwordAttemptString))
         return false;
 
       // Get hash of password attempt and compare to stolen hash.
@@ -172,10 +156,7 @@ namespace MD5PasswordProject
       string passwordAttemptHashString = HashToString(passwordAttemptHash);
       bool result = CompareHashes(passwordAttemptHash, stolenHash);
 
-      // Print password attempt to console and password attempts file.
-      string passwordAttemptResult = passwordAttemptString + " " + passwordAttemptHashString;
-      Console.WriteLine(passwordAttemptResult);
-      File.AppendAllText(passwordAttemptsPath, passwordAttemptResult + Environment.NewLine);
+      LogPasswordAttempt(passwordAttemptString, passwordAttemptHashString);
 
       if (!result)
         return false;
