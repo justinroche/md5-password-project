@@ -85,15 +85,37 @@ namespace MD5PasswordProject
       return false;
     }
 
-    // Validate format of password
+    // Validate format of target 1 password attempts.
     static bool ValidateTarget1String(string input)
     {
-      // Check if the string length is between 5 and 10 characters (inclusive)
+      // Between 5-10 characters.
       if (input.Length < 5 || input.Length > 10)
         return false;
 
-      // Use regular expression to match alphanumeric characters only
+      // Alphanumeric characters only.
       return new Regex("^[a-zA-Z0-9]*$").IsMatch(input);
+    }
+
+    // Validate format of target 2 password attempts.
+    static bool ValidateTarget2String(string input)
+    {
+      // Between 12-18 characters.
+      if (input.Length < 12 || input.Length > 18)
+        return false;
+
+      // Alphanumeric characters only.
+      if (!Regex.IsMatch(input, "^[a-zA-Z0-9]+$"))
+        return false;
+
+      // At least one letter and one number.
+      if (!Regex.IsMatch(input, "[a-zA-Z]") || !Regex.IsMatch(input, "[0-9]"))
+        return false;
+
+      // At least one uppercase and one lowercase letter.
+      if (!Regex.IsMatch(input, "[a-z]") || !Regex.IsMatch(input, "[A-Z]"))
+        return false;
+
+      return true;
     }
 
     // Return MD5 hash of password as byte array.
