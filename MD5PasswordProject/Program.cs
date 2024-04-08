@@ -8,15 +8,17 @@ namespace MD5PasswordProject
   class Program
   {
 
-    // Get passwords already attempted
+    // Get passwords already attempted.
     public static readonly string passwordAttemptsPath = "password_attempts_2.txt";
-    public static readonly HashSet<string> passwordAttempts = new HashSet<string>(File.ReadAllLines(passwordAttemptsPath));
+    public static readonly HashSet<string> passwordAttempts = new HashSet<string>(
+      File.ReadAllLines(passwordAttemptsPath).Select(line => line.Split(' ')[0])
+    );
 
-    // Get set of keywords
+    // Get set of keywords.
     public static readonly string keywordsPath = "keywords_2.txt";
     public static readonly string[] keywords = File.ReadAllLines(keywordsPath);
 
-    // Get stolen hash
+    // Get stolen hash.
     public static readonly string stolenHashString = "7e985df169d043112b23508a81e16538";
     public static readonly byte[] stolenHash = StringTo16ByteHash(stolenHashString);
 
@@ -25,6 +27,7 @@ namespace MD5PasswordProject
 
       Console.WriteLine("Running password generation algorithm...");
       GeneratePasswords(FormatKeywords());
+      Console.WriteLine(passwordAttempts.Count + " passwords attempted.");
       Console.WriteLine("Loop completed.");
 
     }
@@ -45,6 +48,19 @@ namespace MD5PasswordProject
         {
           if (TryLogin(keyword + keyword2))
             return;
+        }
+      }
+
+      // Test 3-keyword passwords.
+      foreach (string keyword in formattedKeywords)
+      {
+        foreach (string keyword2 in formattedKeywords)
+        {
+          foreach (string keyword3 in formattedKeywords)
+          {
+            if (TryLogin(keyword + keyword2 + keyword3))
+              return;
+          }
         }
       }
     }
