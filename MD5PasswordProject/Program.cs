@@ -24,20 +24,27 @@ namespace MD5PasswordProject
     {
 
       Console.WriteLine("Running password generation algorithm...");
-
+      GeneratePasswords(FormatKeywords());
       Console.WriteLine("Loop completed.");
 
     }
 
-    static void GeneratePasswords()
+    static void GeneratePasswords(string[] formattedKeywords)
     {
-      string[] keywordsFormatted = FormatKeywords();
-
-      foreach (string keyword in keywordsFormatted)
+      // Test single keyword passwords.
+      foreach (string keyword in formattedKeywords)
       {
-        foreach (string keyword2 in keywordsFormatted)
+        if (TryLogin(keyword))
+          return;
+      }
+
+      // Test 2-keyword passwords.
+      foreach (string keyword in formattedKeywords)
+      {
+        foreach (string keyword2 in formattedKeywords)
         {
-          TryLogin(keyword + keyword2);
+          if (TryLogin(keyword + keyword2))
+            return;
         }
       }
     }
@@ -159,7 +166,9 @@ namespace MD5PasswordProject
       string passwordAttemptHashString = HashToString(passwordAttemptHash);
       bool result = CompareHashes(passwordAttemptHash, stolenHash);
 
+      // Log and store attempted password.
       LogPasswordAttempt(passwordAttemptString, passwordAttemptHashString);
+      passwordAttempts.Add(passwordAttemptString);
 
       if (!result)
         return false;
