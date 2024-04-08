@@ -9,19 +9,19 @@ namespace MD5PasswordProject
   {
 
     // Get passwords already attempted
-    public static string passwordAttemptsPath = "password_attempts_1.txt";
-    public static HashSet<string> passwordAttempts = new HashSet<string>(File.ReadAllLines(passwordAttemptsPath));
+    public static readonly string passwordAttemptsPath = "password_attempts_1.txt";
+    public static readonly HashSet<string> passwordAttempts = new HashSet<string>(File.ReadAllLines(passwordAttemptsPath));
 
     // Get set of keywords
-    public static string keywordsPath = "keywords.txt";
-    public static string[] keywords = File.ReadAllLines(keywordsPath);
+    public static readonly string keywordsPath = "keywords.txt";
+    public static readonly string[] keywords = File.ReadAllLines(keywordsPath);
+
+    // Get stolen hash
+    public static readonly string stolenHashString = "7b0ca5c95a9398a2f32613d987428180";
+    public static readonly byte[] stolenHash = StringTo16ByteHash(stolenHashString);
 
     static void Main(string[] args)
     {
-
-      // Get stolen hash
-      string stolenHashString = "7b0ca5c95a9398a2f32613d987428180";
-      byte[] stolenHash = StringTo16ByteHash(stolenHashString);
 
       Console.WriteLine("Running password generation algorithm...");
 
@@ -35,7 +35,10 @@ namespace MD5PasswordProject
 
       foreach (string keyword in keywordsFormatted)
       {
-        Console.WriteLine(keyword);
+        foreach (string keyword2 in keywordsFormatted)
+        {
+          TryLogin(keyword + keyword2);
+        }
       }
     }
 
@@ -122,10 +125,10 @@ namespace MD5PasswordProject
     }
 
     // Check if hash byte arrays are equal.
-    static bool CompareHashes(byte[] passwordAttemptHash, byte[] stolenHash)
+    static bool CompareHashes(byte[] hash1, byte[] hash2)
     {
       for (int i = 0; i < 16; i++)
-        if (passwordAttemptHash[i] != stolenHash[i])
+        if (hash1[i] != hash2[i])
           return false;
 
       return true;
@@ -140,7 +143,7 @@ namespace MD5PasswordProject
     }
 
     // Check if password attempt is valid and print result to console and password attempts file.
-    static bool TryLogin(string passwordAttemptString, byte[] stolenHash)
+    static bool TryLogin(string passwordAttemptString)
     {
 
       // Check for correct formatting.
@@ -163,7 +166,7 @@ namespace MD5PasswordProject
 
       // If the password attempt was correct, notify the user and return true.
       Console.WriteLine("Hashes match! Password: " + passwordAttemptString);
-      Console.WriteLine(passwordAttemptHashString + " = " + HashToString(stolenHash));
+      Console.WriteLine(passwordAttemptHashString + " = " + stolenHashString);
       return true;
     }
 
