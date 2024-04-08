@@ -8,18 +8,16 @@ namespace MD5PasswordProject
   class Program
   {
 
+    // Get passwords already attempted
     public static string passwordAttemptsPath = "password_attempts_1.txt";
+    public static string[] passwordAttempts = File.ReadAllLines(passwordAttemptsPath);
+
+    // Get set of keywords
     public static string keywordsPath = "keywords.txt";
+    public static string[] keywords = File.ReadAllLines(keywordsPath);
 
     static void Main(string[] args)
     {
-
-
-      // Get keywords from txt file.
-      string[] keywords = File.ReadAllLines(keywordsPath);
-
-      // Get passwords already attempted
-      string[] passwordAttempts = File.ReadAllLines(passwordAttemptsPath);
 
       // Get stolen hash
       string stolenHashString = "7b0ca5c95a9398a2f32613d987428180";
@@ -47,6 +45,32 @@ namespace MD5PasswordProject
 
       Console.WriteLine("Loop completed.");
 
+    }
+
+    static void GeneratePasswords()
+    {
+      string[] keywordsFormatted = FormatKeywords();
+
+      foreach (string keyword in keywordsFormatted)
+      {
+        Console.WriteLine(keyword);
+      }
+    }
+
+    // Format keywords to include lowercase, uppercase, and first-letter capitalized versions
+    static string[] FormatKeywords()
+    {
+      List<string> formattedKeywords = new List<string>();
+      foreach (string keyword in keywords)
+      {
+        if (Regex.IsMatch(keyword, "[a-zA-Z]"))
+        {
+          formattedKeywords.Add(char.ToUpper(keyword[0]) + keyword[1..]);
+          formattedKeywords.Add(keyword.ToUpper());
+        }
+        formattedKeywords.Add(keyword);
+      }
+      return formattedKeywords.ToArray();
     }
 
     // Check if password hash has already been attempted
