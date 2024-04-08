@@ -9,15 +9,15 @@ namespace MD5PasswordProject
   {
 
     // Get passwords already attempted
-    public static readonly string passwordAttemptsPath = "password_attempts_1.txt";
+    public static readonly string passwordAttemptsPath = "password_attempts_2.txt";
     public static readonly HashSet<string> passwordAttempts = new HashSet<string>(File.ReadAllLines(passwordAttemptsPath));
 
     // Get set of keywords
-    public static readonly string keywordsPath = "keywords_1.txt";
+    public static readonly string keywordsPath = "keywords_2.txt";
     public static readonly string[] keywords = File.ReadAllLines(keywordsPath);
 
     // Get stolen hash
-    public static readonly string stolenHashString = "7b0ca5c95a9398a2f32613d987428180";
+    public static readonly string stolenHashString = "7e985df169d043112b23508a81e16538";
     public static readonly byte[] stolenHash = StringTo16ByteHash(stolenHashString);
 
     static void Main(string[] args)
@@ -154,7 +154,7 @@ namespace MD5PasswordProject
     {
 
       // Check for correct formatting.
-      if (!ValidateTarget1String(passwordAttemptString))
+      if (!ValidateTarget2String(passwordAttemptString))
         return false;
 
       // Check if this password has already been attempted.
