@@ -1,5 +1,0 @@
-bob
-123
-packers
-password
-12345678

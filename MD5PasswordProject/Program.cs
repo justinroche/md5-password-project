@@ -13,7 +13,7 @@ namespace MD5PasswordProject
     public static readonly HashSet<string> passwordAttempts = new HashSet<string>(File.ReadAllLines(passwordAttemptsPath));
 
     // Get set of keywords
-    public static readonly string keywordsPath = "keywords.txt";
+    public static readonly string keywordsPath = "keywords_1.txt";
     public static readonly string[] keywords = File.ReadAllLines(keywordsPath);
 
     // Get stolen hash

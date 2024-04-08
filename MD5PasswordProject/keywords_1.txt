@@ -1,0 +1,17 @@
+bob
+smith
+12
+23
+1985
+85
+madison
+seattle
+jane
+doe
+4
+1
+1989
+89
+alice
+charlie
+orange
