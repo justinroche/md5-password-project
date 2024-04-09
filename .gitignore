@@ -51,4 +51,5 @@ artifacts/
 
 # Visual Studio Code
 .vscode/
+
 MD5PasswordProject/password_attempts_2.txt
