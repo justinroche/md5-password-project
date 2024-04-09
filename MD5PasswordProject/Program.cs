@@ -63,6 +63,24 @@ namespace MD5PasswordProject
           }
         }
       }
+
+      /*
+            // Test 4-keyword passwords.
+            foreach (string keyword in formattedKeywords)
+            {
+              foreach (string keyword2 in formattedKeywords)
+              {
+                foreach (string keyword3 in formattedKeywords)
+                {
+                  foreach (string keyword4 in formattedKeywords)
+                  {
+                    if (TryLogin(keyword + keyword2 + keyword3 + keyword4))
+                      return;
+                  }
+                }
+              }
+            }
+            */
     }
 
     // Format keywords to include lowercase, uppercase, and first-letter capitalized versions
