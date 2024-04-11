@@ -34,28 +34,16 @@ namespace MD5PasswordProject
 
     static void GeneratePasswords(string[] formattedKeywords)
     {
-      // Test single keyword passwords.
       foreach (string keyword in formattedKeywords)
       {
         if (TryLogin(keyword))
           return;
-      }
 
-      // Test 2-keyword passwords.
-      foreach (string keyword in formattedKeywords)
-      {
         foreach (string keyword2 in formattedKeywords)
         {
           if (TryLogin(keyword + keyword2))
             return;
-        }
-      }
 
-      // Test 3-keyword passwords.
-      foreach (string keyword in formattedKeywords)
-      {
-        foreach (string keyword2 in formattedKeywords)
-        {
           foreach (string keyword3 in formattedKeywords)
           {
             if (TryLogin(keyword + keyword2 + keyword3))
@@ -63,24 +51,6 @@ namespace MD5PasswordProject
           }
         }
       }
-
-      /*
-            // Test 4-keyword passwords.
-            foreach (string keyword in formattedKeywords)
-            {
-              foreach (string keyword2 in formattedKeywords)
-              {
-                foreach (string keyword3 in formattedKeywords)
-                {
-                  foreach (string keyword4 in formattedKeywords)
-                  {
-                    if (TryLogin(keyword + keyword2 + keyword3 + keyword4))
-                      return;
-                  }
-                }
-              }
-            }
-            */
     }
 
     // Format keywords to include lowercase, uppercase, and first-letter capitalized versions
