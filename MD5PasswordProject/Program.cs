@@ -44,10 +44,22 @@ namespace MD5PasswordProject
           if (TryLogin(keyword + keyword2))
             return;
 
+          for (int i = 0; i < 100; i++)
+          {
+            if (TryLogin(keyword + keyword2 + i))
+              return;
+          }
+
           foreach (string keyword3 in formattedKeywords)
           {
             if (TryLogin(keyword + keyword2 + keyword3))
               return;
+
+            for (int i = 0; i < 100; i++)
+            {
+              if (TryLogin(keyword + keyword2 + keyword3 + i))
+                return;
+            }
           }
         }
       }
